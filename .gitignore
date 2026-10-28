@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+.vercel/
 
 # Expo
 .expo/
@@ -40,7 +41,10 @@ yarn-error.*
 /ios
 /android
 
-# Capacitor native project (generated, do not commit)
-/capacitor-app/android/
-/capacitor-app/ios/
-/capacitor-app/node_modules/
+# Capacitor generated files
+/apps/mobile/android/
+/apps/mobile/ios/
+/apps/mobile/node_modules/
+
+# Expo prototype dependencies
+/experiments/expo/node_modules/

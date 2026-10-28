@@ -1,6 +1,6 @@
 @echo off
 title Vozzy - Generador de APK Android
-cd /d "%~dp0\capacitor-app"
+cd /d "%~dp0apps\mobile"
 
 echo ======================================================
 echo           VOZZY - GENERADOR DE APK ANDROID
@@ -17,26 +17,12 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-:: 2. Sincronizar archivos web a capacitor-app\www
-echo [1/4] Sincronizando archivos web a capacitor-app\www...
-if not exist "www" mkdir "www"
-copy /y "..\index.html" "www\" >nul
-copy /y "..\app.js" "www\" >nul
-copy /y "..\emergency.js" "www\" >nul
-copy /y "..\style.css" "www\" >nul
-copy /y "..\manifest.json" "www\" >nul
-copy /y "..\sw.js" "www\" >nul
-if exist "..\fonts" xcopy /e /y /i "..\fonts" "www\fonts" >nul
-if exist "..\icons" xcopy /e /y /i "..\icons" "www\icons" >nul
-if exist "..\assets" xcopy /e /y /i "..\assets" "www\assets" >nul
-echo [OK] Archivos web copiados correctamente a www.
-
-:: 3. Verificar dependencias de Capacitor
-echo [2/4] Verificando dependencias de Capacitor...
+:: 1. Verificar dependencias de Capacitor
+echo [1/3] Verificando dependencias de Capacitor...
 if not exist "node_modules\@capacitor\cli" (
     echo [INFO] Instalando paquetes de Capacitor...
-    call npm install
-    if %ERRORLEVEL% neq 0 (
+    call npm ci
+    if errorlevel 1 (
         echo [ERROR] Fallo la instalacion de paquetes npm.
         pause
         exit /b 1
@@ -45,12 +31,12 @@ if not exist "node_modules\@capacitor\cli" (
     echo [OK] Dependencias de Capacitor ya estan listas.
 )
 
-:: 4. Verificar plataforma Android
-echo [3/4] Verificando plataforma Android...
+:: 2. Verificar plataforma Android
+echo [2/3] Verificando plataforma Android...
 if not exist "android" (
     echo [INFO] Creando plataforma Android nativa...
     call npx cap add android
-    if %ERRORLEVEL% neq 0 (
+    if errorlevel 1 (
         echo [ERROR] No se pudo agregar la plataforma Android.
         pause
         exit /b 1
@@ -59,11 +45,10 @@ if not exist "android" (
     echo [OK] Proyecto nativo Android existente.
 )
 
-:: 5. Sincronizar assets con Android
-echo [4/4] Sincronizando con el proyecto Android...
-call npx cap telemetry off >nul 2>nul
-call npx cap sync android
-if %ERRORLEVEL% neq 0 (
+:: 3. Sincronizar la web y los plugins con Android
+echo [3/3] Sincronizando con el proyecto Android...
+call npm run sync:android
+if errorlevel 1 (
     echo [ERROR] Fallo al sincronizar assets con Android.
     pause
     exit /b 1
@@ -101,7 +86,7 @@ if "%OPCION%"=="1" (
             echo.
             echo ======================================================
             echo  [EXITO] APK generado exitosamente en:
-            echo  capacitor-app\android\app\build\outputs\apk\debug\app-debug.apk
+            echo  "%~dp0apps\mobile\android\app\build\outputs\apk\debug\app-debug.apk"
             echo ======================================================
         ) else (
             echo.
@@ -111,7 +96,7 @@ if "%OPCION%"=="1" (
         )
         cd ..
     ) else (
-        echo [ERROR] No se encontro gradlew.bat en capacitor-app\android.
+        echo [ERROR] No se encontro gradlew.bat en apps\mobile\android.
     )
 ) else (
     echo Saliendo...

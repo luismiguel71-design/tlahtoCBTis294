@@ -7,7 +7,7 @@
     "sync:www": "node sync-www.js",
     "sync:android": "npm run sync:www && npx cap sync android",
     "sync:ios": "npm run sync:www && npx cap sync ios",
-    "open:android": "npm run sync:www && npx cap open android",
+    "open:android": "npm run sync:android && npx cap open android",
     "open:ios": "npm run sync:www && npx cap open ios",
     "add:android": "npm run sync:www && npx cap add android",
     "add:ios": "npm run sync:www && npx cap add ios",

@@ -2,6 +2,22 @@
 
 **Vozzy** es una herramienta de Comunicación Aumentativa y Alternativa (CAA / AAC) diseñada como Progressive Web App (PWA) rápida, accesible y moderna para personas mudas o con dificultades del habla.
 
+## Estructura del proyecto
+
+```text
+apps/
+  web/                 # Fuente unica de la PWA: HTML, CSS, JS, fuentes e iconos
+  mobile/              # Capacitor, configuracion y plataforma Android generada
+experiments/
+  expo/                # Prototipo Expo/React Native separado; no genera la APK actual
+tools/
+  icons/               # Herramientas para generar los iconos de la PWA
+```
+
+`apps/mobile/www` es una copia generada de `apps/web`: no edites esos archivos
+directamente. La sincronizacion de Capacitor los vuelve a generar antes de
+preparar Android.
+
 ---
 
 ## ✨ Características principales
@@ -71,16 +87,16 @@ Doble clic en Build_Android_APK.bat
 
 ### Pasos manuales
 ```bash
-cd capacitor-app
-npm install
-npx cap add android        # primera vez
-npx cap sync android       # sincroniza assets web
+cd apps/mobile
+npm ci
+npm run add:android        # primera vez
+npm run sync:android       # sincroniza la fuente apps/web
 npx cap open android       # abre Android Studio
 # En Android Studio: Build → Build APK(s)
 ```
 
 El APK de debug estará en:
-`capacitor-app/android/app/build/outputs/apk/debug/app-debug.apk`
+`apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk`
 
 ### APK firmado (para publicar en Play Store)
 En Android Studio: **Build → Generate Signed Bundle / APK**
@@ -92,8 +108,8 @@ En Android Studio: **Build → Generate Signed Bundle / APK**
 > Requiere una Mac con Xcode 15+ y una cuenta de desarrollador Apple.
 
 ```bash
-cd capacitor-app
-npm install
+cd apps/mobile
+npm ci
 npx cap add ios            # primera vez
 npx cap sync ios           # sincroniza assets web
 npx cap open ios           # abre Xcode
@@ -104,10 +120,21 @@ npx cap open ios           # abre Xcode
 
 ## 🚀 Despliegue en Vercel (PWA web)
 
-1. Conecta tu repositorio de GitHub en Vercel.
-2. **Framework Preset**: `Other` (sin framework).
-3. **Build Command**: dejar vacío.
-4. **Output Directory**: `./` (raíz).
+1. Sube estos cambios a GitHub en la rama `main`.
+2. Inicia sesión en [Vercel](https://vercel.com/) con GitHub y autoriza el acceso al repositorio `luismiguel71-design/tlahtoCBTis294`.
+3. En Vercel, selecciona **Add New → Project** e importa `luismiguel71-design/tlahtoCBTis294`.
+4. En la configuración del proyecto, establece **Root Directory** en `apps/web`.
+5. Usa **Framework Preset: Other**. No agregues comando de build ni instales dependencias: Vozzy es una PWA estática y Vercel publicará los archivos directamente.
+6. Pulsa **Deploy**. Vercel generará una URL pública y desplegará automáticamente los siguientes cambios que subas a GitHub.
+
+El archivo `apps/web/vercel.json` ya configura encabezados para que el navegador no mantenga obsoleto el Service Worker. No elijas `apps/mobile` como directorio raíz: esa carpeta contiene Capacitor para compilar Android, no el sitio web.
+
+## Prototipo Expo
+
+El proyecto Expo anterior se conserva aparte en `experiments/expo`, con su
+propio `package.json` y `app.json`. No participa en la compilacion de la APK
+Capacitor. Para probarlo, ejecuta `npm install` y `npm run start` desde esa
+carpeta.
 
 ---
 

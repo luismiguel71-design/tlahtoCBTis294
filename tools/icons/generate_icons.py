@@ -1,8 +1,9 @@
 import os
 import math
 from PIL import Image, ImageDraw, ImageFont
+from pathlib import Path
 
-icons_dir = r"C:\Users\Bryan Alexis\.gemini\antigravity-ide\scratch\vozzy\icons"
+icons_dir = Path(__file__).resolve().parents[2] / "apps" / "web" / "icons"
 os.makedirs(icons_dir, exist_ok=True)
 
 # Generate SVG

@@ -1,6 +1,6 @@
 @echo off
 title Vozzy - Tu voz, en un toque
-cd /d "%~dp0"
+cd /d "%~dp0apps\web"
 
 echo ============================================
 echo        Iniciando Vozzy PWA
@@ -35,6 +35,6 @@ if %ERRORLEVEL% equ 0 (
 
 :: 3. Modo directo (sin necesidad de instalar nada)
 echo [INFO] Abriendo directamente en tu navegador web predeterminado...
-start "" "%~dp0index.html"
+start "" "%~dp0apps\web\index.html"
 
 :end

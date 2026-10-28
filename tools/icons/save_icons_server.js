@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const iconsDir = path.join(__dirname, 'icons');
+const iconsDir = path.resolve(__dirname, '..', '..', 'apps', 'web', 'icons');
 if (!fs.existsSync(iconsDir)) {
     fs.mkdirSync(iconsDir, { recursive: true });
 }
